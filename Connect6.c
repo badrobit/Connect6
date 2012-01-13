@@ -7,11 +7,14 @@ void initialize_game_board();
 void print_game_board(); 
 void human_place_piece(); 
 void ai_move_offensively(); 
+void play_move( int x, int y );
 
 char game_board[BOARD_SIZE][BOARD_SIZE]; 
 
-int last_move_x = 0; 
-int last_move_y = 0; 
+int start_move_x = 5; 
+int start_move_y = 5; 
+
+int algorithm_progress = 0; 
 
 int main( void )
 {
@@ -38,6 +41,12 @@ void human_place_piece()
 
 	game_board[x-1][y-1] = 'B'; 
 
+	printf( "Enter Coordonate to Place Piece In\n" ); 
+	scanf( "%d", &x ); 
+	scanf( "%d", &y ); 
+
+	game_board[x-1][y-1] = 'B'; 
+
 	print_game_board(); 
 }
 
@@ -45,26 +54,50 @@ void human_place_piece()
 // movemnets of the AI. 
 void ai_move_offensively()
 {
-	int x, y = 0;
+	int t = 0;
+	int x = start_move_x; 
+	int y = start_move_y; 
 	int planning = 1;  
 
-	printf("%s\n", "I got here" );
 
-	while( planning == 1 )
+	if( algorithm_progress == 0 )
 	{
-		if( last_move_x == 0 && last_move_y == 0 )
-		{
-			x = 5; y = 5; 
-		}
-
-		if( game_board[x-1][y-1] == ' ' )
-		{
-			last_move_x = x; 
-			last_move_y = y; 
-			planning == 0; 
-		}
+		play_move( x, y ); 
+		play_move( x, y+1 ); 
+		algorithm_progress += 1;  
 	}
-	game_board[x-1][y-1] = 'W';
+	else if( algorithm_progress == 1  )
+	{
+		play_move( x, y+2 ); 
+		play_move( x, y+3 ); 
+		algorithm_progress += 1; 
+	}
+	else if( algorithm_progress == 2 )
+	{
+		play_move( x+1, y+3 );
+		play_move( x-1, y+3 ); 
+		algorithm_progress += 1; 
+	}
+	else if( algorithm_progress == 3 )
+	{
+		play_move( x+2, y );
+		play_move( x+1, y+1 ); 
+		algorithm_progress += 1; 
+	}
+	else if( algorithm_progress == 4 )
+	{
+		play_move( x+1, y );
+		play_move( x+1, y+2 ); 
+		algorithm_progress += 1; 
+	}
+	else if( algorithm_progress == 5 )
+	{
+		play_move( x+1, y );
+		play_move( x+2, y-1 ); 
+		algorithm_progress += 1; 
+	}
+
+
 	print_game_board(); 
 }  
 
@@ -102,4 +135,14 @@ void initialize_game_board()
 			game_board[x][y] = ' '; 
 		}
 	}
+}
+
+void play_move( int x, int y )
+{
+	if( x > 1 && x < BOARD_SIZE && y > 1 && y < BOARD_SIZE && game_board[x-1][y-1] == ' ' )
+	{
+		printf( "Play Move: ( %d, %d )\n", x, y ); 
+		game_board[x-1][y-1] = 'W';
+	}
+	
 }
