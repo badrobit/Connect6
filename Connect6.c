@@ -48,6 +48,8 @@ void ai_move_offensively()
 	int x, y = 0;
 	int planning = 1;  
 
+	printf("%s\n", "I got here" );
+
 	while( planning == 1 )
 	{
 		if( last_move_x == 0 && last_move_y == 0 )
