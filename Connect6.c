@@ -92,8 +92,8 @@ void ai_move_offensively()
 	}
 	else if( algorithm_progress == 5 )
 	{
-		play_move( x+1, y );
-		play_move( x+2, y-1 ); 
+		play_move( x-1, y );
+		play_move( x-2, y-1 ); 
 		algorithm_progress += 1; 
 	}
 
