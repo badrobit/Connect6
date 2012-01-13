@@ -6,7 +6,7 @@
 char game_board[BOARD_SIZE][BOARD_SIZE]; 
 
 void print_game_board(); 
-void place_piece(); 
+void human_place_piece(); 
 
 int main( void )
 {
