@@ -130,14 +130,15 @@ void ai_move_defensively(int moves_remaining)
 	int x = 0;
 	int z = 0;
 
-	int rstones = 0;
-	int dstones = 0;
-	int diastones = 0;
 
 	for ( x = 0; x < (BOARD_SIZE); x++)
 	{	
 		for( y = 0; y < (BOARD_SIZE); y++)
 		{
+			int rstones = 0;
+			int dstones = 0;
+			int diastones = 0;
+		
 			if(game_board[x][y] == 'B')
 			{
 				//Check to the right, down and diag-right for next 5 squares including this one.
@@ -148,18 +149,19 @@ void ai_move_defensively(int moves_remaining)
 					{
 						rstones++;
 					}
-					/*
+					
 					//Check down
-					if(game_board[x][y + z] == 'B')
+					if(game_board[x + z][y] == 'B')
 					{
 						dstones++;
 					}
+					
 					//Check diagonal
 					if(game_board[x + z][y + z] == 'B')
 					{
 						diastones++;
 					}
-					*/
+					
 				}
 				for(z = 0; z < 6; z++)
 				{
@@ -173,19 +175,16 @@ void ai_move_defensively(int moves_remaining)
 								play_move((x + 1), (y + z + 1));
 								moves_remaining--;
 							}
-						}
-					}
-				}
-					/*
+						}			
 					else if(dstones >= 4)
 					{
-						if(game_board[x][y + z] == ' ')
+						if(game_board[x + z][y] == ' ')
 						{
-							play_move((x + 1), (y + z + 1));
+							play_move((x + z + 1), (y + 1));
 							moves_remaining--;
 						}
 					}
-					else if(diastones >= 4)
+				    else if(diastones >= 4)
 					{
 						if(game_board[x + z][y + z] == ' ')
 						{
@@ -193,7 +192,8 @@ void ai_move_defensively(int moves_remaining)
 							moves_remaining--;
 						}
 					}
-					*/
+					}
+				}
 				
 				}
 			}
