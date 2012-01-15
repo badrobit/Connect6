@@ -169,44 +169,41 @@ void ai_move_defensively(int moves_remaining)
 					{
 						if(rstones >= 4)
 						{
-							if(game_board[x][y + z] == ' ')
+							if(game_board[x][y + z - 1] == ' ')
 							{
 								printf("%d", rstones);
-								play_move((x + 1), (y + z + 1));
+								play_move((x + 1), (y + z));
 								moves_remaining--;
 							}
 						}			
-					else if(dstones >= 4)
-					{
-						if(game_board[x + z][y] == ' ')
+						else if(dstones >= 4)
 						{
-							play_move((x + z + 1), (y + 1));
-							moves_remaining--;
+							if(game_board[x + z - 1][y] == ' ')
+							{
+								play_move((x + z), (y + 1));
+								moves_remaining--;
+							}
+						}
+				    	else if(diastones >= 4)
+						{
+							if(game_board[x + z - 1][y + z - 1] == ' ')
+							{
+								play_move((x + z), (y + z));
+								moves_remaining--;
+							}
 						}
 					}
-				    else if(diastones >= 4)
-					{
-						if(game_board[x + z][y + z] == ' ')
-						{
-							play_move((x + z + 1), (y + z + 1));
-							moves_remaining--;
-						}
-					}
-					}
-				}
-				
 				}
 			}
 		}
+	}
 	//If moves remaining, play offensive
 	if(moves_remaining > 0)
 	{
 		//ai_move_offensively(moves_remaining);
 	}
-	else	
-	{
-		print_game_board();	
-	}
+
+	print_game_board();	
 }
 
 
@@ -248,7 +245,7 @@ game_board[x][y] = ' ';
 
 void play_move( int x, int y )
 {
-if( x > 1 && x < BOARD_SIZE && y > 1 && y < BOARD_SIZE && game_board[x-1][y-1] == ' ' )
+if( x >= 1 && x < BOARD_SIZE && y >= 1 && y < BOARD_SIZE && game_board[x-1][y-1] == ' ' )
 {
 printf( "Play Move: ( %d, %d )\n", x, y );
 game_board[x-1][y-1] = 'W';
