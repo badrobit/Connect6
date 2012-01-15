@@ -6,13 +6,33 @@
 void initialize_game_board();
 void print_game_board();
 void human_place_piece();
-void ai_move_offensively();
-void ai_move_defensively();
+void ai_move_offensively( int moves );
+void ai_move_defensively( int moves );
 void play_move( int x, int y );
 
-int moves_remaining = 2;
-
 char game_board[BOARD_SIZE][BOARD_SIZE];
+int game_board_weights[BOARD_SIZE][BOARD_SIZE] = 
+{
+        {-1,0,1,2,3,4,5,6,7,8,7,6,5,4,3,2,1,0,-1},
+        {0,1,2,3,4,5,6,7,8,9,8,7,6,5,4,3,2,1,0},
+        {1,2,3,4,5,6,7,8,9,10,9,8,7,6,5,4,3,2,1},
+        {2,3,4,5,6,7,8,9,10,11,10,9,8,7,6,5,4,3,2},
+        {3,4,5,6,7,8,9,10,11,12,11,10,9,8,7,6,5,4,3},
+        {4,5,6,7,8,9,10,11,12,13,12,11,10,9,8,7,6,5,4},
+        {5,6,7,8,9,10,11,12,13,14,13,12,11,10,9,8,7,6,5},
+        {6,7,8,9,10,11,12,13,14,17,16,13,12,11,10,9,8,7,6},
+        {7,8,9,10,11,12,13,14,20,16,20,14,13,12,11,10,9,8,7},
+        {8,9,10,11,12,13,14,17,16,30,16,17,14,13,12,11,10,9,8},
+        {7,8,9,10,11,12,13,14,20,16,20,14,13,12,11,10,9,8,7},
+        {6,7,8,9,10,11,12,13,14,17,14,13,12,11,10,9,8,7,6},
+        {5,6,7,8,9,10,11,12,13,14,13,12,11,10,9,8,7,6,5},
+        {4,5,6,7,8,9,10,11,12,13,12,11,10,9,8,7,6,5,4},
+        {3,4,5,6,7,8,9,10,11,12,11,10,9,8,7,6,5,4,3},
+        {2,3,4,5,6,7,8,9,10,11,10,9,8,7,6,5,4,3,2},
+        {1,2,3,4,5,6,7,8,9,10,9,8,7,6,5,4,3,2,1},
+        {0,1,2,3,4,5,6,7,8,9,8,7,6,5,4,3,2,1,0},
+        {-1,0,1,2,3,4,5,6,7,8,7,6,5,4,3,2,1,0,-1}
+};
 
 int start_move_x = 5;
 int start_move_y = 5;
@@ -25,8 +45,8 @@ initialize_game_board();
 
 while( 1 )
 {
-human_place_piece();
-ai_move_defensively();
+        human_place_piece();
+        ai_move_defensively(2);
 }
 
 return(0);
@@ -55,7 +75,7 @@ print_game_board();
 
 // A function that will capture the offensive (game winning)
 // movemnets of the AI.
-void ai_move_offensively()
+void ai_move_offensively(int moves_remaining)
 {
 int t = 0;
 int x = start_move_x;
@@ -100,58 +120,87 @@ play_move( x-2, y-1 );
 algorithm_progress += 1;
 }
 
-//
-void ai_move_defensively()
-{
-	int x = 0;
-	int rstones, dstones, diastones = 0;
-	for( x = 0; x < (BOARD_SIZE); x++)
-	{
-		if(game_board[x][x % (BOARD_SIZE - 1)] == 'W')
-		{
-			//Check to the right, down and diag-right for next 5 squares including this one.
-			for(int y = 0; y < 6; y++)
-			{
-				//Check right
-				if(game_board[x + y][x % (BOARD_SIZE - 1)] == 'W')
-				{
-					rstones++;
-				}
-				//Check down
-				if(game_board[x + y][x % (BOARD_SIZE - 1) + y] == 'W')
-				{
-					dstones++;
-				}
-				//Check diagonal
-				if(game_board[x + y][x % (BOARD_SIZE - 1) + y] == 'W')
-				{
-					diastones++;
-				}
-			}
-			//play defensive move and decrement remaining moves/stones. 
-			if(rstones >= 4)
-			{
-				
-			}
-			if(dstones >= 4)
-			{
-
-			}
-			if(diastones >= 4)
-			{
-
-			}
-		}
-	}
-	//If moves remaining, play offensive
-	if(moves_remaining > 0)
-	{
-		ai_move_offensively();
-	}
-}
-
 print_game_board();
 }
+
+//defensive moves.
+void ai_move_defensively(int moves_remaining)
+{
+        int y = 0;
+        int x = 0;
+        int rstones, dstones, diastones = 0;
+        for( x = 0; x < (BOARD_SIZE); x++)
+        {
+                if(game_board[x][x % (BOARD_SIZE - 1)] == 'B')
+                {
+                        //Check to the right, down and diag-right for next 5 squares including this one.
+                        for(y = 0; y < 6; y++)
+                        {
+                                //Check right
+                                if(game_board[x + y][x % (BOARD_SIZE - 1)] == 'B')
+                                {
+                                        rstones++;
+                                }
+                                //Check down
+                                if(game_board[x + y][x % (BOARD_SIZE - 1) + y] == 'B')
+                                {
+                                        dstones++;
+                                }
+                                //Check diagonal
+                                if(game_board[x + y][x % (BOARD_SIZE - 1) + y] == 'B')
+                                {
+                                        diastones++;
+                                }
+                        }
+                        //play defensive move and decrement remaining moves/stones. 
+                        for(y = 0; y < 6; y++)
+                        {
+                                if(moves_remaining > 0)
+                                {
+                                        if(rstones >= 4)
+                                        {
+                                                if(game_board[x + y][x % (BOARD_SIZE - 1)] == ' ')
+                                                {
+                                                        play_move((x + 1 + y), (x % (BOARD_SIZE - 1) + 1));
+                                                        moves_remaining--;
+                                                }
+                                                
+                                        }
+                                        else if(dstones >= 4)
+                                        {
+                                                if(game_board[x][x % (BOARD_SIZE - 1) + y] == ' ')
+                                                {
+                                                        play_move((x + 1), (x % (BOARD_SIZE - 1) + y + 1));
+                                                        moves_remaining--;
+                                                }
+                                        }
+                                        else if(diastones >= 4)
+                                        {
+                                                if(game_board[x + y][x % (BOARD_SIZE - 1) + y] == ' ')
+                                                {
+                                                        play_move((x + 1 + y), (x % (BOARD_SIZE - 1) + y + 1));
+                                                        moves_remaining--;
+                                                }
+                                        }
+                                }
+                                else
+                                {
+                                        break;  
+                                }
+                        }
+                }
+        }
+        //If moves remaining, play offensive
+        if(moves_remaining > 0)
+        {
+                //ai_move_offensively(moves_remaining);
+        }
+        else    
+        {
+                print_game_board();     
+        }
+}
+
 
 // Used to print out the game board for visual display to the
 // user.
